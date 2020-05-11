@@ -10,4 +10,6 @@
 
 #Environment Variables
 .env
-mysql-gen
+
+#my-sql script 
+mysql-gen 
