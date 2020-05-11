@@ -7,3 +7,7 @@
 
 # macOS
 .DS_Store
+
+#Environment Variables
+.env
+mysql-gen
