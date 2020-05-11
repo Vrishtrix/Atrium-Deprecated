@@ -23,9 +23,8 @@ const init = () => {
             method: 'GET',
             path: '/api/login',
             handler: (request, h) => {
-                  email = request.params.email
-                  password = request.params.password
-                  return (Login(email, password))
+                  
+                  return (Login(request.params.email, request.params.password))
             }
 
 
@@ -37,12 +36,8 @@ const init = () => {
             method: 'GET',
             path: '/api/register',
             handler: (request, h) => {
-                  email = request.params.email
-                  password = request.params.password,
-                  firstname = request.params.firstname,
-                  lastname = request.params.lastname,
-                  phone = request.params.phone
-                  return (Register(email, password, firstname, lastname, phone))
+                  
+                  return (Register(request.params.email, request.params.password, request.params.firstname, request.params.lastname, request.params.phone))
 
             }
       });
