@@ -1,9 +1,9 @@
 module.exports = (email, password) => {
 
     const jwt = require('jsonwebtoken');
-    const bcrypt = require('bcrypt')
-    const connection = require('./../config/config');
-    const encryptedpass = bcrypt.hash(password, 10)
+    const argon2 = require('argon2')
+    const connection = require('../src/config');
+    const encryptedpass = argon2.hash(password)
 
     connection.query('SELECT * FROM users WHERE email = ?', [email], function (error, results, fields) {
         if (error) {

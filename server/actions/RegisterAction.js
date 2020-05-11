@@ -1,7 +1,10 @@
-module.exports = (email, password, firstname, lastname, phone) => {
-    const bcrypt = require('bcrypt')
-    const connection = require('./../config/config');
-    const encryptpass = bcrypt.hash(password, 10);
+require('dotenv/config')
+
+module.exports = async (email, password, firstname, lastname, phone) => {
+
+    const argon2 = require('argon2')
+    const connection = require('../src/config');
+    const encryptpass = await argon2.hash(password);
     const users = {
         "email": [email],
         "password": encryptpass,
@@ -13,13 +16,13 @@ module.exports = (email, password, firstname, lastname, phone) => {
     }
     connection.query('INSERT INTO users SET ?', users, function (error, results, fields) {
         if (error) {
-            //console.log('Error occured')
+            console.log(error)
             return ({
                 "code": 400,
                 "failed": "An error ocurred"
             })
         } else {
-            //console.log('Registered successfully')
+            console.log('Registered successfully')
             return ({
                 "code": 200,
                 "success": "User registered sucessfully"
