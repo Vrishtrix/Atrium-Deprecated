@@ -1,7 +1,7 @@
 const Hapi = require('@hapi/hapi');
-const jwt = require('jsonwebtoken');
+const Login = require('../actions/loginAction.js')
+const Register = require('../actions/RegisterAction.js')
 
-const doLogin = require('../actions/loginAction.js')
 
 const init = () => {
       const server = Hapi.server({
@@ -25,7 +25,7 @@ const init = () => {
             handler: (request, h) => {
                   email = request.params.email
                   password = request.params.password
-                  return (doLogin(email, password))
+                  return (Login(email, password))
             }
 
 
@@ -37,6 +37,12 @@ const init = () => {
             method: 'GET',
             path: '/api/register',
             handler: (request, h) => {
+                  email = request.params.email
+                  password = request.params.password,
+                  firstname = request.params.firstname,
+                  lastname = request.params.lastname,
+                  phone = request.params.phone
+                  return (Register(email, password, firstname, lastname, phone))
 
             }
       });
