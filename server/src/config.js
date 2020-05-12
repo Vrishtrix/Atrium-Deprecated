@@ -4,7 +4,7 @@ var connection = mysql.createConnection({
   host: ck.DB_HOST,
   user: ck.DB_USER,
   password: ck.DB_PASS,
-  database: 'auth'
+  database: 'atrium'
 });
 connection.connect(function (err) {
   if (!err) {

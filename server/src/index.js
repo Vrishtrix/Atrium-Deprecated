@@ -1,23 +1,17 @@
 const Hapi = require('@hapi/hapi');
 const ck = require('ckey');
-const Login = require('../actions/loginAction.js')
-const Register = require('../actions/RegisterAction.js')
-const Path = require('path')
+const login = require('../actions/login.js')
+const register = require('../actions/register.js')
+
 
 const start = async () => {
       const server = Hapi.server
             ({
                   port: 80,
                   host: '0.0.0.0',
-                  routes: {
-                        files: {
-                              relativeTo: Path.join(__dirname, 'public')
-                        }
-                  }
-
+                  
             });
 
-      await server.register(require('@hapi/inert'))
 
       //For react, dont edit
       server.route({
@@ -30,68 +24,54 @@ const start = async () => {
 
       //API routing for login
       server.route({
-            method: 'GET',
+            method: 'POST',
             path: '/api/login',
-            handler: (request, h) => {
-                  if (request.params.verify === ck.VERIFY) {
-                        return (Login(request.params.email, request.params.password))
+            handler: async (request, h) => {
+                  const payload = request.payload
+                  if (payload.verify = ck.VERIFY){
+                        return(login(payload.email , payload.password ))
                   }
-                  else {
-                        return h.file('index.html');
+                  else{
+                        return 'Error 404. Page not found'
                   }
-
+                  
+                  
             }
       });
 
-      server.route({
-            path: '/css/{path*}',
-            method: 'GET',
-            handler: {
-                  directory: {
-                        path: 'css',
-                        listing: false,
-                        index: false
-                  }
-            }
-      })
 
       //API routing for register
       server.route({
-            method: 'GET',
+            method: 'POST',
             path: '/api/register',
-            handler: (request, h) => {
-                  if (request.params.verify === ck.VERIFY) {
-                        return (Register(request.params.email, request.params.password, request.params.firstname, request.params.lastname, request.params.phone))
+            handler: async (request, h) => {
+                  const payload = request.payload
+                  if (payload.verify = ck.VERIFY){
+                        return(register(payload.email , payload.password ,payload.firstname, payload.lastname , payload.phone))
                   }
-                  else {
-                        return h.file('./index.html');
+                  else{
+                        return 'Error 404. Page not found'
                   }
-
-
+                  
+                  
             }
       });
 
 
-      server.route({
-            method: 'GET',
-            path: '/api',
-            handler: (request, h) => {
-                  return h.file('./index.html')
 
-            }
-      });
+  
 
       server.route({
-            method: 'GET',
+            method: 'POST',
             path: '/api/',
             handler: (request, h) => {
-                  return h.file('./index.html')
+                  return '404 Page not found';
 
             }
       });
 
       server.start();
-      console.log(`Server running on ${server.info.uri} `);
+      console.log(`Server running on ${server.info.uri} , ${ck.V} `);
 }
 
 process.on('unhandledRejection', err => {
