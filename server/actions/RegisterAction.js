@@ -1,10 +1,8 @@
-require('dotenv/config')
-
 module.exports = async (email, password, firstname, lastname, phone) => {
 
     const argon2 = require('argon2')
     const connection = require('../src/config');
-    const encryptpass = await argon2.hash(password);
+    const encryptpass = await argon2.hash(password)
     const users = {
         "email": [email],
         "password": encryptpass,
@@ -29,12 +27,12 @@ module.exports = async (email, password, firstname, lastname, phone) => {
             });
         }
     });
-    connection.end(function(err) {
+    connection.end(function (err) {
         if (err) {
-          return console.log('error:' + err.message);
+            return console.log('error:' + err.message);
         }
         console.log('Database Connection Closed.');
-      });
+    });
 }
 
 

@@ -13,3 +13,6 @@
 
 #my-sql script 
 mysql-gen 
+
+#test scripts
+test.js
