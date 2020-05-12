@@ -1,12 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Route } from 'react-router-dom'
+import './App.css'
+
+import Login from './pages/Login/index'
 
 const App = () => {
       return (
-            <>
-                  <h1>It works!</h1>
-            </>
+            <BrowserRouter>
+                  <Route exact path='/' component={Login} />
+            </BrowserRouter>
       )
 }
 
