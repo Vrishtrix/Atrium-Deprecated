@@ -38,7 +38,14 @@ module.exports = (email, password) => {
                     status: false,
                     message: "Email does not exits"
                 });
+                
             }
         }
     });
+    connection.end(function(err) {
+        if (err) {
+          return console.log('error:' + err.message);
+        }
+        console.log('Database Connection Closed.');
+      });
 }

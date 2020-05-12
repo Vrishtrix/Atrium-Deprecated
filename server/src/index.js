@@ -1,13 +1,22 @@
 const Hapi = require('@hapi/hapi');
 const Login = require('../actions/loginAction.js')
 const Register = require('../actions/RegisterAction.js')
+const Path = require('path')
 
-
-const init = () => {
-      const server = Hapi.server({
+const start = async () => {
+      const server = Hapi.server
+      ({
             port: 80,
-            host: '0.0.0.0'
+            host: '0.0.0.0',
+            routes: {
+                  files: {
+                        relativeTo: Path.join(__dirname, 'public')
+                  }
+            }
+            
       });
+
+      await server.register(require('@hapi/inert'))
 
       //For react, dont edit
       server.route({
@@ -23,34 +32,65 @@ const init = () => {
             method: 'GET',
             path: '/api/login',
             handler: (request, h) => {
+                  if (request.params.verify === '62fe5e897218bcf843eefea0')  {
+                        return (Login(request.params.email, request.params.password))
+                  }
+                  else {
+                        return h.file('index.html');
+                  }
                   
-                  return (Login(request.params.email, request.params.password))
             }
-
-
-
-
       });
+
+      server.route({
+            path: '/css/{path*}',
+            method: 'GET',
+            handler: {
+                  directory: {
+                        path: 'css',
+                        listing: false,
+                        index: false
+                  }
+            }
+      })
+
       //API routing for register
       server.route({
             method: 'GET',
             path: '/api/register',
             handler: (request, h) => {
+                  if (request.params.verify === '62fe5e897218bcf843eefea0') {
+                        return (Register(request.params.email, request.params.password, request.params.firstname, request.params.lastname, request.params.phone))
+                  }
+                  else {
+                        return h.file('./index.html');
+                  }
+
                   
-                  return (Register(request.params.email, request.params.password, request.params.firstname, request.params.lastname, request.params.phone))
+                  //return (Register(request.params.email, request.params.password, request.params.firstname, request.params.lastname, request.params.phone))
 
             }
       });
 
-      /*
+      
       server.route({
             method: 'GET',
-            path: '/api/___',
+            path: '/api',
             handler: (request, h) => {
+                  return h.file('./index.html')
                   
             }
       });
-      */
+      
+      server.route({
+            method: 'GET',
+            path: '/api/',
+            handler: (request, h) => {
+                  return h.file('./index.html')
+                  
+            }
+      });
+      
       server.start();
       console.log(`Server running on ${server.info.uri}`);
 }
@@ -60,4 +100,4 @@ process.on('unhandledRejection', err => {
       process.exit(1);
 });
 
-init();
+start();
