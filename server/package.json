@@ -13,9 +13,12 @@
     "@hapi/hapi": "^19.1.1",
     "@hapi/joi": "^17.1.1",
     "argon2": "^0.26.2",
-    "dotenv": "^8.2.0",
+    "bcryptjs": "^2.4.3",
+    "ckey": "^1.0.2",
+    "install": "^0.13.0",
     "jsonwebtoken": "^8.5.1",
-    "mysql2": "^2.1.0"
+    "mysql2": "^2.1.0",
+    "npm": "^6.14.5"
   },
   "devDependencies": {
     "@hapi/inert": "^6.0.1",

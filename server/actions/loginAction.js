@@ -1,11 +1,10 @@
-module.exports = (email, password) => {
+module.exports = async (email, password) => {
 
     const jwt = require('jsonwebtoken');
     const argon2 = require('argon2')
     const connection = require('../src/config');
-    const encryptedpass = argon2.hash(password)
 
-    connection.query('SELECT * FROM users WHERE email = ?', [email], function (error, results, fields) {
+    connection.query('SELECT * FROM users WHERE email = ?', [email], async function (error, results, fields) {
         if (error) {
             return ({
                 status: false,
@@ -13,11 +12,12 @@ module.exports = (email, password) => {
             })
         } else {
             if (results.length > 0) {
-                if (encryptedpass === results[0].password) {
+                const compare = await argon2.verify(results[0].password, password)
+                if (compare) {
                     const data = { 'firstname': results[0].firstname, 'lastname': results[0].lastname, "email": results[0].email, "phone": results[0].phone }
-                    const signOptions = { issuer: Atrium, subject: Login, audience: atrium.com, expiresIn: "48h", algorithm: "RS256" };
+                    const signOptions = { issuer: 'Atrium', subject: 'Login', audience: 'atrium.com', expiresIn: "48h", algorithm: "HS256" };
                     const token = jwt.sign(data, process.env.SECRET_KEY, signOptions)
-                    //console.log('Authenticated')
+                    console.log('Authenticated')
                     return ({
                         status: true,
                         token: token
@@ -38,14 +38,14 @@ module.exports = (email, password) => {
                     status: false,
                     message: "Email does not exits"
                 });
-                
+
             }
         }
     });
-    connection.end(function(err) {
+    connection.end(function (err) {
         if (err) {
-          return console.log('error:' + err.message);
+            return console.log('error:' + err.message);
         }
         console.log('Database Connection Closed.');
-      });
+    });
 }
