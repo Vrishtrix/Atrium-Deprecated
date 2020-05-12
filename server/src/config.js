@@ -12,5 +12,6 @@ if(!err) {
 } else {
     console.log("Error while connecting with database");
 }
+
 });
 module.exports = connection;

@@ -29,6 +29,12 @@ module.exports = async (email, password, firstname, lastname, phone) => {
             });
         }
     });
+    connection.end(function(err) {
+        if (err) {
+          return console.log('error:' + err.message);
+        }
+        console.log('Database Connection Closed.');
+      });
 }
 
 
