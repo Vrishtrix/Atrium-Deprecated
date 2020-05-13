@@ -1,5 +1,5 @@
 const argon2 = require('argon2')
-const connection = require('../src/config');
+const connection = require('../config/config');
 module.exports = async (email, password, firstname, lastname, phone) => {
     const encryptpass = await argon2.hash(password)
     return new Promise((resolve, reject) => {

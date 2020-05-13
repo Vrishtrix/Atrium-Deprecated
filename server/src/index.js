@@ -1,7 +1,9 @@
 const Hapi = require('@hapi/hapi');
-const ck = require('ckey');
 const login = require('../actions/login.js')
 const register = require('../actions/register.js')
+const courtbookings = require('../actions/courtbookings')
+const retrievebookings = require('../actions/retrievebookings')
+const verify = '62fe5e897218bcf843eefea0'
 
 
 const start = async () => {
@@ -28,7 +30,7 @@ const start = async () => {
             path: '/api/login',
             handler: async (request, h) => {
                   const payload = request.payload
-                  if (payload.verify = ck.VERIFY){
+                  if (payload.verify === verify){
                         return(login(payload.email , payload.password ))
                   }
                   else{
@@ -46,7 +48,7 @@ const start = async () => {
             path: '/api/register',
             handler: async (request, h) => {
                   const payload = request.payload
-                  if (payload.verify = ck.VERIFY){
+                  if (payload.verify === verify){
                         return(register(payload.email , payload.password ,payload.firstname, payload.lastname , payload.phone))
                   }
                   else{
@@ -59,19 +61,27 @@ const start = async () => {
 
 
 
-  
+      //API routing for court bookings
 
       server.route({
             method: 'POST',
-            path: '/api/',
+            path: '/api/bookings',
             handler: (request, h) => {
-                  return '404 Page not found';
+                  const payload
+                  if (payload.verify == verify ){
+
+                        return(courtbookings(payload.firstname, payload.date , payload.time , paylaod.arenaid , payload.bookingid , payload.email , payload.phone))
+
+                  }
+                  else {
+                        return '404 Page not found';
+                  }
 
             }
       });
 
       server.start();
-      console.log(`Server running on ${server.info.uri} , ${ck.V} `);
+      console.log(`Server running on ${server.info.uri} `);
 }
 
 process.on('unhandledRejection', err => {
