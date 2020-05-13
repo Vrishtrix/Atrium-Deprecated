@@ -1,11 +1,11 @@
 import React from 'react'
+import axios from 'axios'
 
 import {
       Form,
       Input,
       Button,
-      Checkbox,
-      Row
+      Checkbox
 } from 'antd'
 
 import { 
@@ -16,7 +16,21 @@ import {
 export default () => {
 
       const onFinish = values => {
-            console.log('Login successful' + values)
+            const email = values.email
+            const password = values.password
+            axios.post('http://localhost:80/api/login', {
+                  email: email,
+                  password: password,
+                  verify: '62fe5e897218bcf843eefea0'
+            })
+            .then( (res) => {
+                  console.log('Login successful')
+                  console.log('res')
+            })
+            .catch( (err) => {
+                  console.log('Login failed')
+                  console.error(err)
+            })
       }
 
       const onFinishFailed = errorInfo => {
@@ -41,7 +55,7 @@ export default () => {
                         </Form.Item>
 
                         <Form.Item
-                              name='Password'
+                              name='password'
                               rules={[ {required: true, message: 'Please enter your password!'} ]}
                         >
                               <Input.Password 
