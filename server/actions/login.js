@@ -16,8 +16,8 @@ module.exports = async (email, password) => {
                     if (results.length > 0) {
                         const compare = await argon2.verify(results[0].password, password)
                         if (compare) {
-                            return resolve (jwtsign(results[0].firstname , results[0].lastname , results[0].email, results[0].phone))
-                            
+                            return resolve(jwtsign(results[0].firstname, results[0].lastname, results[0].email, results[0].phone))
+
                         } else {
                             //console.log('Not authenticated')
                             return resolve({
