@@ -1,10 +1,28 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+
+import { AppLoading } from 'expo'
+import { loadResourcesAsync, handleLoadingError } from './core/resources'
+
+//Screens
+import { LoginScreen } from './Screens/LoginScreen';;
 
 export default function App() {
+
+  const [isLoadingComplete, setLoadingComplete] = React.useState(false)
+  
+  if (!isLoadingComplete) {
+		return (
+			<AppLoading
+				startAsync={loadResourcesAsync}
+				onError={handleLoadingError}
+				onFinish={() => setLoadingComplete(true)}
+			/>
+		)
+	}
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
+      <LoginScreen />
     </View>
   );
 }
