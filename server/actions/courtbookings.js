@@ -1,9 +1,9 @@
 const connection = require('../config/config');
 
-module.exports = async (firstname , date, time, arenaid, bookingid, email , phone) => {
+module.exports = async (firstname, date, time, arenaid, bookingid, email, phone) => {
     return new Promise((resolve, reject) => {
         const bookings = {
-            'firstname' : [firstname],
+            'firstname': [firstname],
             'date': [date],
             'time': [time],
             'arenais': [arenaid],

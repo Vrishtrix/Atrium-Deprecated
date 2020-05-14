@@ -1,43 +1,151 @@
 const connection = require('../config/config')
-const argon2 = require('argon2')
 const jwtsign = require('../config/jwtsign')
+const ck = require('ckey')
+const otpGenerator = require("otp-generator");
+const messagebird = require('messagebird')(ck.API)
+const crypto = require("crypto");
+const key = ck.OTP_KEY;
 
 
-module.exports = async (email, password) => {
-    return new Promise((resolve, reject) => {
-        connection.query('SELECT * FROM users WHERE email = ?', [email],
-            async (error, results, fields) => {
-                if (error) {
-                    return resolve({
-                        status: false,
-                        message: 'Error with the query'
-                    })
-                } else {
-                    if (results.length > 0) {
-                        const compare = await argon2.verify(results[0].password, password)
-                        if (compare) {
-                            return resolve (jwtsign(results[0].firstname , results[0].lastname , results[0].email, results[0].phone))
-                            
-                        } else {
-                            //console.log('Not authenticated')
-                            return resolve({
-                                status: false,
-                                message: "Email and password does not match",
 
-                            });
-                        }
+module.exports.verify_otp = async (phone, otp, hash, ) => {
 
-                    }
-                    else {
-                        //console.log('Not authenticated')
-                        return resolve({
-                            status: false,
-                            message: "Email does not exits"
-                        });
+  return new Promise(async (resolve, reject) => {
+    let [hashValue, expires] = hash.split(".");
 
-                    }
-                }
+    let now = Date.now();
+    if (now > parseInt(expires)) return false;
+
+    let data = `${phone}.${otp}.${expires}`;
+    let newCalculatedHash = crypto.createHmac("sha256", key).update(data).digest("hex");
+
+    if (newCalculatedHash === hashValue) {
+
+      connection.query('SELECT * FROM users WHERE phone = ?', [phone],
+        async (error, results, fields) => {
+          if (error) {
+            return resolve({
+              status: false,
+              message: 'Error with the query'
+            })
+          } else {
+
+            return resolve(jwtsign(results[0].firstname, results[0].lastname, results[0].email, results[0].phone))
+
+          }
+
+
+
+
+        });
+    }
+    else {
+      return resolve('OTP verification failed')
+    }
+  })
+}
+
+
+
+
+module.exports.gen_otp = async (phone) => {
+
+  return new Promise((resolve, reject) => {
+    connection.query('SELECT * FROM users WHERE phone = ?', [phone],
+      async (error, results, fields) => {
+        if (error) {
+          return resolve({
+            status: false,
+            message: 'Error with the query'
+          })
+        } else {
+          if (results.length > 0) {
+            const otp = otpGenerator.generate(6, { alphabets: false, upperCase: false, specialChars: false });
+            const ttl = 5 * 60 * 1000; //5 Minutes in miliseconds
+            const expires = Date.now() + ttl; //timestamp to 5 minutes in the future
+            const data = `${phone}.${otp}.${expires}`; // phone.otp.expiry_timestamp
+            const hash = crypto.createHmac("sha256", key).update(data).digest("hex"); // creating SHA256 hash of the data
+            const fullHash = `${hash}.${expires}`; // Hash.expires, format to send to the user
+
+
+
+
+            var params = {
+              'originator': 'MessageBird',
+              'recipients': [
+                `+91` + phone
+              ],
+              'body': `Your OTP for logging into Atrium is ${otp}`
+
+            };
+
+            messagebird.messages.create(params, function (err, response) {
+              if (err) {
+                console.log(err)
+                return resolve('An error occured');
+              } else {
+                console.log(response)
+                return resolve({
+                  'status': "OTP SENT SUCCESSFULLY",
+                  'hash': fullHash,
+                  'otp': otp
+
+                })
+              }
+
+
             });
 
-    })
+          }
+          else {
+            //console.log('Not authenticated')
+            return resolve({
+              status: false,
+              message: "Email does not exits"
+            });
+
+          }
+        }
+      });
+  })
 }
+
+module.exports.login_email = async (email, password) => {
+  return new Promise((resolve, reject) => {
+      connection.query('SELECT * FROM users WHERE email = ?', [email],
+          async (error, results, fields) => {
+              if (error) {
+                  return resolve({
+                      status: false,
+                      message: 'Error with the query'
+                  })
+              } else {
+                  if (results.length > 0) {
+                      const compare = await argon2.verify(results[0].password, password)
+                      if (compare) {
+                          return resolve (jwtsign(results[0].firstname , results[0].lastname , results[0].email, results[0].phone))
+                          
+                      } else {
+                          //console.log('Not authenticated')
+                          return resolve({
+                              status: false,
+                              message: "Email and password does not match",
+
+                          });
+                      }
+
+                  }
+                  else {
+                      //console.log('Not authenticated')
+                      return resolve({
+                          status: false,
+                          message: "Email does not exits"
+                      });
+
+                  }
+              }
+          });
+
+  })
+}
+

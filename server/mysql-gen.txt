@@ -6,7 +6,8 @@ CREATE TABLE `users`
 `password` varchar(225) COLLATE utf8_unicode_ci NOT NULL, 
 `firstname` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
 `lastname` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-`phone` integer(30) COLLATE utf8_unicode_ci NOT NULL); 
+`phone` varchar(30) COLLATE utf8_unicode_ci NOT NULL);
+
 
 
 //court bookings
@@ -20,3 +21,6 @@ CREATE TABLE  `bookings`
 `bookingid` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
 `email` varchar(40) COLLATE utf8_unicode_ci UNIQUE KEY NOT NULL,
 `phone` integer(30) COLLATE utf8_unicode_ci UNIQUE KEY NOT NULL); 
+
+
+
