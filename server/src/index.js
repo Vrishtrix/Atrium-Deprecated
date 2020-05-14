@@ -1,5 +1,5 @@
 const Hapi = require('@hapi/hapi');
-const login = require('../actions/login.js')
+const login = require('../actions/login')
 const register = require('../actions/register.js')
 const courtbookings = require('../actions/courtbookings')
 const retrievebookings = require('../actions/retrievebookings')
@@ -11,7 +11,7 @@ const start = async () => {
             ({
                   port: 80,
                   host: '0.0.0.0',
-                  
+
             });
 
 
@@ -27,19 +27,57 @@ const start = async () => {
       //API routing for login
       server.route({
             method: 'POST',
-            path: '/api/login',
+            path: '/api/login/email',
             handler: async (request, h) => {
                   const payload = request.payload
-                  if (payload.verify === verify){
-                        return(login(payload.email , payload.password ))
+                  if (payload.verify === verify) {
+
+                        return (login.login_email(payload.email, payload.password))
                   }
-                  else{
+                  else {
                         return 'Error 404. Page not found'
                   }
-                  
-                  
+
+
             }
       });
+
+
+      server.route({
+            method: 'POST',
+            path: '/api/login/otp/gen',
+            handler: async (request, h) => {
+                  const payload = request.payload
+                  if (payload.verify === verify) {
+
+                        return (login.otp_gen(payload.phone))
+                  }
+                  else {
+                        return 'Error 404. Page not found'
+                  }
+
+
+            }
+      });
+
+
+      server.route({
+            method: 'POST',
+            path: '/api/login/otp/verify',
+            handler: async (request, h) => {
+                  const payload = request.payload
+                  if (payload.verify === verify) {
+
+                        return (login.otp_verify(payload.phone, payload.otp, payload.hash))
+                  }
+                  else {
+                        return 'Error 404. Page not found'
+                  }
+
+
+            }
+      });
+
 
 
       //API routing for register
@@ -48,14 +86,14 @@ const start = async () => {
             path: '/api/register',
             handler: async (request, h) => {
                   const payload = request.payload
-                  if (payload.verify === verify){
-                        return(register(payload.email , payload.password ,payload.firstname, payload.lastname , payload.phone))
+                  if (payload.verify === verify) {
+                        return (register(payload.email, payload.password, payload.firstname, payload.lastname, payload.phone))
                   }
-                  else{
+                  else {
                         return 'Error 404. Page not found'
                   }
-                  
-                  
+
+
             }
       });
 
@@ -67,10 +105,10 @@ const start = async () => {
             method: 'POST',
             path: '/api/bookings',
             handler: (request, h) => {
-                  const payload
-                  if (payload.verify == verify ){
+                  const payload = request.paylaod
+                  if (payload.verify === verify) {
 
-                        return(courtbookings(payload.firstname, payload.date , payload.time , paylaod.arenaid , payload.bookingid , payload.email , payload.phone))
+                        return (courtbookings(payload.firstname, payload.date, payload.time, paylaod.arenaid, payload.bookingid, payload.email, payload.phone))
 
                   }
                   else {
