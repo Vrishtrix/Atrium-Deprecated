@@ -3,8 +3,8 @@ import * as Font from 'expo-font'
 export const loadResourcesAsync = async() => {
 	await Promise.all([
 		Font.loadAsync({
-			'Trebuchet': require('../assets/fonts/trebuchet-ms-regular.ttf'),
-			'Roboto': require('../assets/fonts/roboto-regular.ttf')
+			'roboto-regular': require('../assets/fonts/roboto-regular.ttf'),
+			'balsamiq-sans-regular': require('../assets/fonts/balsamiq-sans-regular.ttf')
 		})
 	])
 }

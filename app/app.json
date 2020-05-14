@@ -11,7 +11,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "androidNavigationBar": {
-      "visible": "stikcy-immersive"
+      "visible": "sticky-immersive"
     },
     "splash": {
       "image": "./assets/splash.png",

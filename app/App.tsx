@@ -5,7 +5,8 @@ import { AppLoading } from 'expo'
 import { loadResourcesAsync, handleLoadingError } from './core/resources'
 
 //Screens
-import { LoginScreen } from './Screens/LoginScreen';;
+import { StartScreen } from './Screens/StartScreen';
+import { LoginScreen } from './Screens/LoginScreen';
 
 export default function App() {
 
@@ -22,7 +23,7 @@ export default function App() {
 	}
   return (
     <View style={styles.container}>
-      <LoginScreen />
+      <StartScreen />
     </View>
   );
 }
