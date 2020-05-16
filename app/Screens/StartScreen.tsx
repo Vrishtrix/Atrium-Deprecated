@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { 
-      StyleSheet, 
+
+import { StyleSheet, 
       View, 
       Image, 
       Text, 
@@ -9,7 +9,7 @@ import {
 
 import Svg, { Ellipse } from 'react-native-svg';
 
-export const StartScreen = (props: any) => {
+export const StartScreen = (props: any): JSX.Element => {
       return (
             <View style={styles.container}>
                   <View style={styles.ellipseStack}>
@@ -40,23 +40,31 @@ export const StartScreen = (props: any) => {
                               Winning isn&#39;t everything, but wanting to win is.
                         </Text>
                   </View>
-            
-                  <TouchableOpacity style={styles.button}>
-                        <Text style={styles.getStarted}>Get Started</Text>
-                  </TouchableOpacity>
                   
-                  <Text style={styles.orLogin}>Have an accout already? Login.</Text>
+                  <View style={styles.ellipseStackFiller} />
+                  
+                  <View style={styles.buttonColumn}>
+                        
+                        <TouchableOpacity style={styles.button}>
+                              <View style={styles.getStartedFiller} />
+                              
+                              <Text style={styles.getStarted}> Get Started </Text>
+                        </TouchableOpacity>
+                              
+                        <Text style={styles.orLogin}>Have an accout already? Login.</Text>
+                  </View>
             </View>
-  );
+      );
 }
 
 const styles = StyleSheet.create({
       container: {
-            flex: 1
+            flex: 1,
+            alignItems: 'center',
       },
 
       ellipse: {
-            top: 39,
+            top: 47,
             width: 470,
             height: 320,
             position: 'absolute',
@@ -65,37 +73,42 @@ const styles = StyleSheet.create({
 
       image: {
             top: 0,
-            left: 0,
             width: 507,
             height: 524,
-            position: 'absolute'
+            position: 'absolute',
+            left: 0
       },
 
       image2: {
-            top: 407,
-            left: 173,
             width: 161,
             height: 164,
-            position: 'absolute'
+            position: 'absolute',
+            top: 452,
+            left: 173
       },
 
       loremIpsum: {
-            top: 534,
-            left: 127,
+            top: 573,
             position: 'absolute',
             fontFamily: 'roboto-regular',
             color: 'rgba(98,98,98,1)',
             height: 91,
             width: 254,
             textAlign: 'center',
-            fontSize: 15
+            fontSize: 15,
+            left: 127
       },
 
       ellipseStack: {
             width: 507,
-            height: 625,
-            marginTop: -83,
+            height: 664,
+            marginTop: -93,
             marginLeft: -66
+      },
+
+      ellipseStackFiller: {
+            flex: 1,
+            alignItems: 'center'
       },
 
       button: {
@@ -111,8 +124,13 @@ const styles = StyleSheet.create({
             elevation: 60,
             shadowOpacity: 0.3,
             shadowRadius: 20,
-            marginTop: 40,
-            marginLeft: 39
+            marginBottom: 16,
+            marginLeft: 31
+      },
+
+      getStartedFiller: {
+            flex: 1,
+            alignItems: 'center'
       },
 
       getStarted: {
@@ -122,18 +140,22 @@ const styles = StyleSheet.create({
             width: 168,
             fontSize: 25,
             textAlign: 'center',
-            marginTop: 18,
-            marginLeft: 64
+            marginBottom: 16,
+            alignSelf: 'center'
       },
 
       orLogin: {
             fontFamily: 'roboto-regular',
             color: '#121212',
             height: 32,
-            width: 318,
+            width: 360,
             fontSize: 20,
-            textAlign: 'center',
-            marginTop: 51,
-            marginLeft: 28
+            textAlign: 'center'
+      },
+
+      buttonColumn: {
+            width: 360,
+            marginBottom: 75,
+            marginLeft: 8
       }
 });
