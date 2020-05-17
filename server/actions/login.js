@@ -14,7 +14,7 @@ module.exports.verify_otp = async (phone, otp, hash, ) => {
     let [hashValue, expires] = hash.split(".");
 
     let now = Date.now();
-    if (now > parseInt(expires)) return false;
+    if (now > parseInt(expires)) return resolve ('Code expired');
 
     let data = `${phone}.${otp}.${expires}`;
     let newCalculatedHash = crypto.createHmac("sha256", key).update(data).digest("hex");
@@ -30,7 +30,7 @@ module.exports.verify_otp = async (phone, otp, hash, ) => {
             })
           } else {
 
-            return resolve(jwtsign(results[0].firstname, results[0].lastname, results[0].email, results[0].phone))
+            return resolve(jwtsign(results[0].firstname, results[0].lastname, results[0].phone))
 
           }
 
@@ -40,7 +40,7 @@ module.exports.verify_otp = async (phone, otp, hash, ) => {
         });
     }
     else {
-      return resolve('OTP verification failed')
+      return resolve('OTP verification failed.')
     }
   })
 }
@@ -71,7 +71,7 @@ module.exports.gen_otp = async (phone) => {
 
 
             var params = {
-              'originator': 'MessageBird',
+              'originator': 'Atriumm',
               'recipients': [
                 `+91` + phone
               ],
@@ -101,7 +101,7 @@ module.exports.gen_otp = async (phone) => {
             //console.log('Not authenticated')
             return resolve({
               status: false,
-              message: "Email does not exits"
+              message: "Phone does not exits. Send the user to registration page"
             });
 
           }
@@ -110,7 +110,7 @@ module.exports.gen_otp = async (phone) => {
   })
 }
 
-module.exports.login_email = async (email, password) => {
+/*module.exports.login_email = async (email, password) => {
   return new Promise((resolve, reject) => {
       connection.query('SELECT * FROM users WHERE email = ?', [email],
           async (error, results, fields) => {
@@ -124,7 +124,7 @@ module.exports.login_email = async (email, password) => {
                       const compare = await argon2.verify(results[0].password, password)
                       if (compare) {
                           return resolve (jwtsign(results[0].firstname , results[0].lastname , results[0].email, results[0].phone))
-                          
+
                       } else {
                           //console.log('Not authenticated')
                           return resolve({
@@ -147,5 +147,5 @@ module.exports.login_email = async (email, password) => {
           });
 
   })
-}
+}*/
 
