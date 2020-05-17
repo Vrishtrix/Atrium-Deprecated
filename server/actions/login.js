@@ -14,7 +14,7 @@ module.exports.verify_otp = async (phone, otp, hash, ) => {
     let [hashValue, expires] = hash.split(".");
 
     let now = Date.now();
-    if (now > parseInt(expires)) return resolve ('Code expired');
+    if (now > parseInt(expires)) return resolve('Code expired');
 
     let data = `${phone}.${otp}.${expires}`;
     let newCalculatedHash = crypto.createHmac("sha256", key).update(data).digest("hex");
@@ -54,10 +54,10 @@ module.exports.gen_otp = async (phone) => {
     connection.query('SELECT * FROM users WHERE phone = ?', [phone],
       async (error, results, fields) => {
         if (error) {
-          return resolve({
+          return console.log(({
             status: false,
             message: 'Error with the query'
-          })
+          }))
         } else {
           if (results.length > 0) {
             const otp = otpGenerator.generate(6, { alphabets: false, upperCase: false, specialChars: false });
@@ -81,14 +81,13 @@ module.exports.gen_otp = async (phone) => {
 
             messagebird.messages.create(params, function (err, response) {
               if (err) {
-                console.log(err)
-                return resolve('An error occured');
+                return (console.log(err))
+                //return resolve('Could not send the otp');
               } else {
                 console.log(response)
                 return resolve({
-                  'status': "OTP SENT SUCCESSFULLY",
-                  'hash': fullHash,
-                  'otp': otp
+                  'status': true,
+                  'hash': fullHash
 
                 })
               }
