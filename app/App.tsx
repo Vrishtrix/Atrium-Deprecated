@@ -5,8 +5,7 @@ import { AppLoading } from 'expo';
 import { loadResourcesAsync, handleLoadingError } from './core/resources'
 
 //Screens
-import { LoadingScreen } from './Screens/LoadingScreen';
-import { LandingScreen } from './Screens/LandingScreen';
+import { LoadingScreen, LandingScreen, LoginScreen } from './Screens';
 
 
 export default function App() {
@@ -27,7 +26,7 @@ export default function App() {
   }
   return (
     <View style={styles.container}>
-      <LandingScreen />
+      <LoginScreen />
     </View>
   );
 }
