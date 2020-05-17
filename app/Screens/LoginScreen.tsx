@@ -10,7 +10,7 @@ import {
 
 import axios from 'axios';
 
-const doLogin = (phoneNo: string) => {
+const doLogin = async(phoneNo: string) => {
 
       const verify = '62fe5e897218bcf843eefea0'
 
@@ -52,7 +52,7 @@ export const LoginScreen = (props: any) => {
                         />
 
                         <TouchableOpacity 
-
+                              onPress={ () => doLogin(phoneNo) }
                               style={styles.button}
                         >
                               <Text style={styles.buttontext}> Send OTP </Text>
