@@ -38,7 +38,7 @@ export const LandingScreen = (props: any) => (
                   </TouchableOpacity>
             </View>
       </View>
-)
+);
 
 const win = Dimensions.get('screen');
 
@@ -94,4 +94,4 @@ const styles = StyleSheet.create({
             fontSize: 20,
             color: '#fff'
       }
-})
+});
