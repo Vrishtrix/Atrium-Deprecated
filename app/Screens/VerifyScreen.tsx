@@ -12,32 +12,31 @@ import {
 
 import axios from 'axios';
 
-const [ wrongOTP, changeWrongOTP ] = React.useState(false);
+export const VerifyScreen = ({ navigation }: { navigation: any }) => {
 
-const doVerification = (OTP: string) => {
-
-      const verify = '62fe5e897218bcf843eefea0'
-
-      axios.post('localhost:80/api/login/otp/verify', {
-            otp: OTP,
-            verify: verify
-      })
-      .then( async(res) => {
-            if(res.data.token != null && res.data.status == 'successful') {
-                  await AsyncStorage.setItem( '@MySuperStore:atriumtoken', JSON.stringify(res.data.token));
-                  //navigate to dashboard
-            } else {
-                  changeWrongOTP(true);
-            }
-      })
-      .catch( (err) => {
-            console.error('We have encountered a problem while logging you in: \n', err);
-      });
-}
-
-export const VerifyScreen = ( navigation: {navigate: any}) => {
-
+      const [ wrongOTP, changeWrongOTP ] = React.useState(false);
       const [ OTP, changeOTP ] = React.useState('');
+
+      const doVerification = (OTP: string) => {
+
+            const verify = '62fe5e897218bcf843eefea0'
+      
+            axios.post('localhost:80/api/login/otp/verify', {
+                  otp: OTP,
+                  verify: verify
+            })
+            .then( async(res) => {
+                  if(res.data.token != null && res.data.status == 'successful') {
+                        //await AsyncStorage.setItem( '@MySuperStore:atriumtoken', JSON.stringify(res.data.token));
+                        //navigate to dashboard
+                  } else {
+                        changeWrongOTP(true);
+                  }
+            })
+            .catch( (err) => {
+                  console.error('We have encountered a problem while logging you in: \n', err);
+            });
+      }
 
       return (
             <View style={styles.container}>
