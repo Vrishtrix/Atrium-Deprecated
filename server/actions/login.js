@@ -25,12 +25,12 @@ module.exports.verify_otp = async (phone, otp, hash, ) => {
         async (error, results, fields) => {
 
 
-          return resolve({
-            'status': 'successful',
-            'token': jwtsign(results[0].firstname, results[0].lastname, results[0].phone)
+          return resolve(
+
+            jwtsign(results[0].firstname, results[0].lastname, results[0].phone)
 
 
-          })
+          )
 
         }
 

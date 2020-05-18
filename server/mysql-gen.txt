@@ -2,11 +2,9 @@
 
 CREATE TABLE `users` 
 (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-`email` varchar(40) COLLATE utf8_unicode_ci NOT NULL, 
-`password` varchar(225) COLLATE utf8_unicode_ci NOT NULL, 
 `firstname` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
 `lastname` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-`phone` varchar(30) COLLATE utf8_unicode_ci NOT NULL);
+`phone` varchar(30) COLLATE utf8_unicode_ci NOT NULL  UNIQUE KEY);
 
 
 

@@ -1,9 +1,10 @@
+const ck = require('ckey')
 const argon2 = require('argon2')
 const connection = require('../config/config');
 const messagebird = require('messagebird')(ck.API)
 const crypto = require("crypto");
 const key = ck.OTP_KEY;
-const ck = require('ckey')
+
 const otpGenerator = require("otp-generator");
 
 module.exports = async (firstname, lastname, phone) => {
