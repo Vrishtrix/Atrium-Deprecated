@@ -21,11 +21,11 @@ export const VerifyScreen = ({ navigation }: { navigation: any }) => {
 
             const verify = '62fe5e897218bcf843eefea0'
       
-            axios.post('localhost:80/api/login/otp/verify', {
+            axios.post('http:localhost:80/api/login/otp/verify', {
                   otp: OTP,
                   verify: verify
             })
-            .then( async(res) => {
+            .then( (res) => {
                   if(res.data.token != null && res.data.status == 'successful') {
                         //await AsyncStorage.setItem( '@MySuperStore:atriumtoken', JSON.stringify(res.data.token));
                         //navigate to dashboard
