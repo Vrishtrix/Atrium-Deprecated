@@ -10,7 +10,7 @@ import {
 
 import * as Animatable from 'react-native-animatable';
 
-export const LandingScreen = (props: any) => (
+export const LandingScreen = ({ navigation }: { navigation: any }) => (
       <View style={styles.container}>
             <View style={styles.topcontainer}>
 
@@ -33,7 +33,10 @@ export const LandingScreen = (props: any) => (
             </View>
 
             <View style={styles.bottomcontainer}>
-                  <TouchableOpacity style={styles.button}>
+                  <TouchableOpacity 
+                        onPress={ () => navigation.navigate('Login')}
+                        style={styles.button}
+                  >
                         <Text style={styles.buttontext}> Get Started! </Text>
                   </TouchableOpacity>
             </View>

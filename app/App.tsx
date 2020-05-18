@@ -1,11 +1,14 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+
+import 'react-native-gesture-handler';
+
+import { NavigationContainer } from '@react-navigation/native'
+import { Navigation } from './core/navigation'
 
 import { AppLoading } from 'expo';
 import { loadResourcesAsync, handleLoadingError } from './core/resources'
 
-//Screens
-import { LoadingScreen, LandingScreen, LoginScreen } from './Screens';
+import { LoadingScreen } from './Screens';
 
 
 export default function App() {
@@ -25,18 +28,9 @@ export default function App() {
         )
   }
   return (
-    <View style={styles.container}>
-      <LoginScreen />
-    </View>
+      <NavigationContainer>
+        <Navigation />
+      </NavigationContainer>
+
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    height: '100%',
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
