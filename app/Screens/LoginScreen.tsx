@@ -14,16 +14,16 @@ export const LoginScreen = ({ navigation }: { navigation: any }) => {
 
       const [ phoneNo, changePhoneNo ] = React.useState('');
 
-      const doLogin = (phoneNo: string) => {
+      const doLogin = async(phoneNo: string) => {
 
             const verify = '62fe5e897218bcf843eefea0'
       
-            axios.post('localhost:80/api/login/otp/gen', {
+            axios.post('http:localhost:80/api/login/otp/gen', {
                   phone: phoneNo,
                   verify: verify
             })
             .then( (res) => {
-                  res.status ? navigation.navigate('Verify') : console.log('go to register page')
+                  res.data.status ? navigation.navigate('Verify') : console.log('go to register page')
             })
             .catch( (err) => {
                   console.error('We have encountered a problem while logging you in: \n', err);
