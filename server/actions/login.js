@@ -82,7 +82,7 @@ module.exports.gen_otp = async (phone) => {
             messagebird.messages.create(params, function (err, response) {
               if (err) {
                 return (console.log(err))
-                //return resolve('Could not send the otp');
+
               } else {
                 console.log(response)
                 return resolve({
@@ -97,10 +97,8 @@ module.exports.gen_otp = async (phone) => {
 
           }
           else {
-            //console.log('Not authenticated')
             return resolve({
-              status: false,
-              message: "Phone does not exits. Send the user to registration page"
+              'status': false
             });
 
           }
