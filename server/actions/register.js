@@ -8,7 +8,7 @@ const key = ck.OTP_KEY;
 const otpGenerator = require("otp-generator");
 
 module.exports = async (firstname, lastname, phone) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async(resolve, reject) => {
 
         const users = {
             "firstname": [firstname],
@@ -44,18 +44,19 @@ module.exports = async (firstname, lastname, phone) => {
 
                 };
 
-                messagebird.messages.create(params, function (err, response) {
+                messagebird.messages.create(params,  (err, response) => {
 
                     console.log(response)
-                    return resolve({
-                        'status': true,
-                        'hash': fullHash
-
-                    })
-
-
+                   
 
                 });
+                return resolve({
+                    'status': true,
+                    'hash': fullHash
+
+                })
+
+
             }
         });
     })

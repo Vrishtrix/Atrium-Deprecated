@@ -75,7 +75,7 @@ module.exports.gen_otp = async (phone) => {
 
           };
 
-          await messagebird.messages.create(params, (err, response) => {
+          await messagebird.messages.create(params, async (err, response) => {
             console.log(response)
           });
 
@@ -98,42 +98,5 @@ module.exports.gen_otp = async (phone) => {
   })
 }
 
-/*module.exports.login_email = async (email, password) => {
-  return new Promise((resolve, reject) => {
-      connection.query('SELECT * FROM users WHERE email = ?', [email],
-          async (error, results, fields) => {
-              if (error) {
-                  return resolve({
-                      status: false,
-                      message: 'Error with the query'
-                  })
-              } else {
-                  if (results.length > 0) {
-                      const compare = await argon2.verify(results[0].password, password)
-                      if (compare) {
-                          return resolve (jwtsign(results[0].firstname , results[0].lastname , results[0].email, results[0].phone))
 
-                      } else {
-                          //console.log('Not authenticated')
-                          return resolve({
-                              status: false,
-                              message: "Email and password does not match",
-
-                          });
-                      }
-
-                  }
-                  else {
-                      //console.log('Not authenticated')
-                      return resolve({
-                          status: false,
-                          message: "Email does not exits"
-                      });
-
-                  }
-              }
-          });
-
-  })
-}*/
 
