@@ -1,37 +1,54 @@
 import React from 'react';
 import {
+      AsyncStorage,
       TextInput,
       StyleSheet,
       View,
       Text,
       TouchableOpacity,
-      Image
+      Image,
+      Modal
 } from 'react-native';
 
 import axios from 'axios';
 
-const doLogin = (phoneNo: string) => {
+const [ wrongOTP, changeWrongOTP ] = React.useState(false);
+
+const doVerification = (OTP: string) => {
 
       const verify = '62fe5e897218bcf843eefea0'
 
-      axios.post('localhost:80/api/login/otp/gen', {
-            phone: phoneNo,
+      axios.post('localhost:80/api/login/otp/verify', {
+            otp: OTP,
             verify: verify
       })
-      .then( (res) => {
-            res.status ? 'go to otp page' : 'go to register page'
+      .then( async(res) => {
+            if(res.data.token != null && res.data.status == 'successful') {
+                  await AsyncStorage.setItem( '@MySuperStore:atriumtoken', JSON.stringify(res.data.token));
+                  //navigate to dashboard
+            } else {
+                  changeWrongOTP(true);
+            }
       })
       .catch( (err) => {
             console.error('We have encountered a problem while logging you in: \n', err);
       });
 }
 
-export const LoginScreen = (props: any) => {
+export const VerifyScreen = ( navigation: {navigate: any}) => {
 
-      const [ phoneNo, changePhoneNo ] = React.useState('');
+      const [ OTP, changeOTP ] = React.useState('');
 
       return (
             <View style={styles.container}>
+
+                  <Modal
+                        animationType='slide'
+                        visible={wrongOTP}
+                  >
+
+                  </Modal>
+
                   <View style={styles.topcontainer}>
 
                         <Text style={styles.title}>
@@ -43,19 +60,19 @@ export const LoginScreen = (props: any) => {
                   <View style={styles.middlecontainer}>
 
                         <TextInput 
-                              placeholder='Phone Number'
+                              placeholder='One-Time Password'
                               keyboardType='number-pad'
-                              value={phoneNo}
+                              value={OTP}
                               maxLength={10}
-                              onChangeText={ (val) => changePhoneNo(val) }
+                              onChangeText={ (val) => changeOTP(val) }
                               style={styles.input}
                         />
 
                         <TouchableOpacity 
-                              onPress={ () => doLogin(phoneNo) }
+                              onPress={ () => doVerification(OTP) }
                               style={styles.button}
                         >
-                              <Text style={styles.buttontext}> Send OTP </Text>
+                              <Text style={styles.buttontext}> Login </Text>
                         </TouchableOpacity>
 
                   </View>
