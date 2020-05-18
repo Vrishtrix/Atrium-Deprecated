@@ -1,6 +1,4 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-
 
 import 'react-native-gesture-handler';
 
