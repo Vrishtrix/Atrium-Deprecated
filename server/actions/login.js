@@ -51,57 +51,49 @@ module.exports.verify_otp = async (phone, otp, hash, ) => {
 
 module.exports.gen_otp = async (phone) => {
 
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     connection.query('SELECT * FROM users WHERE phone = ?', [phone],
       async (error, results, fields) => {
-        if (error) {
-          return console.log(({
-            status: false,
-            message: 'Error with the query'
-          }))
-        } else {
-          if (results.length > 0) {
-            const otp = otpGenerator.generate(6, { alphabets: false, upperCase: false, specialChars: false });
-            const ttl = 5 * 60 * 1000; //5 Minutes in miliseconds
-            const expires = Date.now() + ttl; //timestamp to 5 minutes in the future
-            const data = `${phone}.${otp}.${expires}`; // phone.otp.expiry_timestamp
-            const hash = crypto.createHmac("sha256", key).update(data).digest("hex"); // creating SHA256 hash of the data
-            const fullHash = `${hash}.${expires}`; // Hash.expires, format to send to the user
+
+        if (results.length > 0) {
+          const otp = otpGenerator.generate(6, { alphabets: false, upperCase: false, specialChars: false });
+          const ttl = 5 * 60 * 1000;
+          const expires = Date.now() + ttl;
+          const data = `${phone}.${otp}.${expires}`;
+          const hash = crypto.createHmac("sha256", key).update(data).digest("hex");
+          const fullHash = `${hash}.${expires}`;
 
 
 
 
-            var params = {
-              'originator': 'Atrium',
-              'recipients': [
-                `+91` + phone
-              ],
-              'body': `Your OTP for logging into Atrium is ${otp}`
+          var params = {
+            'originator': 'Atrium',
+            'recipients': [
+              `+91` + phone
+            ],
+            'body': `Your OTP for logging into Atrium is ${otp}`
 
-            };
+          };
 
-            messagebird.messages.create(params, function (err, response) {
+          await messagebird.messages.create(params, (err, response) => {
+            console.log(response)
+          });
 
-              console.log(response)
-              return resolve({
-                'status': true,
-                'hash': fullHash
+          return resolve({
+            'status': true,
+            'hash': fullHash
 
-              })
+          })
 
-
-
-            });
-
-          }
-          else {
-            return resolve({
-              'status': false,
-              'hash': null
-            });
-
-          }
         }
+        else {
+          return resolve({
+            'status': false,
+            'hash': null
+          });
+
+        }
+
       });
   })
 }
