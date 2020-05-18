@@ -23,24 +23,25 @@ module.exports.verify_otp = async (phone, otp, hash, ) => {
 
       connection.query('SELECT * FROM users WHERE phone = ?', [phone],
         async (error, results, fields) => {
-          if (error) {
-            return resolve({
-              status: false,
-              message: 'Error with the query'
-            })
-          } else {
-
-            return resolve(jwtsign(results[0].firstname, results[0].lastname, results[0].phone))
-
-          }
 
 
+          return resolve({
+            'status': 'successful',
+            'token': jwtsign(results[0].firstname, results[0].lastname, results[0].phone)
 
 
-        });
+          })
+
+        }
+
+      );
     }
     else {
-      return resolve('OTP verification failed.')
+      return resolve({
+        'status': 'unsuccessful',
+        'token': null
+
+      })
     }
   })
 }
@@ -71,7 +72,7 @@ module.exports.gen_otp = async (phone) => {
 
 
             var params = {
-              'originator': 'Atriumm',
+              'originator': 'Atrium',
               'recipients': [
                 `+91` + phone
               ],
@@ -80,17 +81,14 @@ module.exports.gen_otp = async (phone) => {
             };
 
             messagebird.messages.create(params, function (err, response) {
-              if (err) {
-                return (console.log(err))
 
-              } else {
-                console.log(response)
-                return resolve({
-                  'status': true,
-                  'hash': fullHash
+              console.log(response)
+              return resolve({
+                'status': true,
+                'hash': fullHash
 
-                })
-              }
+              })
+
 
 
             });
@@ -98,7 +96,8 @@ module.exports.gen_otp = async (phone) => {
           }
           else {
             return resolve({
-              'status': false
+              'status': false,
+              'hash': null
             });
 
           }
