@@ -14,7 +14,7 @@ module.exports.verify_otp = async (phone, otp, hash, ) => {
     let [hashValue, expires] = hash.split(".");
 
     let now = Date.now();
-    if (now > parseInt(expires)) return false;
+    if (now > parseInt(expires)) return resolve('Code expired');
 
     let data = `${phone}.${otp}.${expires}`;
     let newCalculatedHash = crypto.createHmac("sha256", key).update(data).digest("hex");
@@ -23,24 +23,25 @@ module.exports.verify_otp = async (phone, otp, hash, ) => {
 
       connection.query('SELECT * FROM users WHERE phone = ?', [phone],
         async (error, results, fields) => {
-          if (error) {
-            return resolve({
-              status: false,
-              message: 'Error with the query'
-            })
-          } else {
-
-            return resolve(jwtsign(results[0].firstname, results[0].lastname, results[0].email, results[0].phone))
-
-          }
 
 
+          return resolve({
+            'status': 'successful',
+            'token': jwtsign(results[0].firstname, results[0].lastname, results[0].phone)
 
 
-        });
+          })
+
+        }
+
+      );
     }
     else {
-      return resolve('OTP verification failed')
+      return resolve({
+        'status': 'unsuccessful',
+        'token': null
+
+      })
     }
   })
 }
@@ -54,10 +55,10 @@ module.exports.gen_otp = async (phone) => {
     connection.query('SELECT * FROM users WHERE phone = ?', [phone],
       async (error, results, fields) => {
         if (error) {
-          return resolve({
+          return console.log(({
             status: false,
             message: 'Error with the query'
-          })
+          }))
         } else {
           if (results.length > 0) {
             const otp = otpGenerator.generate(6, { alphabets: false, upperCase: false, specialChars: false });
@@ -71,7 +72,7 @@ module.exports.gen_otp = async (phone) => {
 
 
             var params = {
-              'originator': 'MessageBird',
+              'originator': 'Atrium',
               'recipients': [
                 `+91` + phone
               ],
@@ -80,28 +81,23 @@ module.exports.gen_otp = async (phone) => {
             };
 
             messagebird.messages.create(params, function (err, response) {
-              if (err) {
-                console.log(err)
-                return resolve('An error occured');
-              } else {
-                console.log(response)
-                return resolve({
-                  'status': "OTP SENT SUCCESSFULLY",
-                  'hash': fullHash,
-                  'otp': otp
 
-                })
-              }
+              console.log(response)
+              return resolve({
+                'status': true,
+                'hash': fullHash
+
+              })
+
 
 
             });
 
           }
           else {
-            //console.log('Not authenticated')
             return resolve({
-              status: false,
-              message: "Email does not exits"
+              'status': false,
+              'hash': null
             });
 
           }
@@ -110,7 +106,7 @@ module.exports.gen_otp = async (phone) => {
   })
 }
 
-module.exports.login_email = async (email, password) => {
+/*module.exports.login_email = async (email, password) => {
   return new Promise((resolve, reject) => {
       connection.query('SELECT * FROM users WHERE email = ?', [email],
           async (error, results, fields) => {
@@ -124,7 +120,7 @@ module.exports.login_email = async (email, password) => {
                       const compare = await argon2.verify(results[0].password, password)
                       if (compare) {
                           return resolve (jwtsign(results[0].firstname , results[0].lastname , results[0].email, results[0].phone))
-                          
+
                       } else {
                           //console.log('Not authenticated')
                           return resolve({
@@ -147,5 +143,5 @@ module.exports.login_email = async (email, password) => {
           });
 
   })
-}
+}*/
 

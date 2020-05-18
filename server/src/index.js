@@ -25,7 +25,7 @@ const start = async () => {
       });
 
       //API routing for login
-      server.route({
+      /*server.route({
             method: 'POST',
             path: '/api/login/email',
             handler: async (request, h) => {
@@ -40,7 +40,7 @@ const start = async () => {
 
 
             }
-      });
+      });*/
 
 
       server.route({
@@ -50,7 +50,7 @@ const start = async () => {
                   const payload = request.payload
                   if (payload.verify === verify) {
 
-                        return (login.otp_gen(payload.phone))
+                        return (login.gen_otp(payload.phone))
                   }
                   else {
                         return 'Error 404. Page not found'
@@ -68,7 +68,7 @@ const start = async () => {
                   const payload = request.payload
                   if (payload.verify === verify) {
 
-                        return (login.otp_verify(payload.phone, payload.otp, payload.hash))
+                        return (login.verify_otp(payload.phone, payload.otp, payload.hash))
                   }
                   else {
                         return 'Error 404. Page not found'
@@ -87,7 +87,7 @@ const start = async () => {
             handler: async (request, h) => {
                   const payload = request.payload
                   if (payload.verify === verify) {
-                        return (register(payload.email, payload.password, payload.firstname, payload.lastname, payload.phone))
+                        return (register(payload.firstname, payload.lastname, payload.phone))
                   }
                   else {
                         return 'Error 404. Page not found'
@@ -108,7 +108,7 @@ const start = async () => {
                   const payload = request.paylaod
                   if (payload.verify === verify) {
 
-                        return (courtbookings(payload.firstname, payload.date, payload.time, paylaod.arenaid, payload.bookingid, payload.email, payload.phone))
+                        return (courtbookings(payload.firstname, payload.date, payload.time, paylaod.arenaid, payload.bookingid, payload.phone))
 
                   }
                   else {
