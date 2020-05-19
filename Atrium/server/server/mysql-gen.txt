@@ -1,0 +1,24 @@
+//add users
+
+CREATE TABLE `users` 
+(id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+`firstname` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+`lastname` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+`phone` varchar(30) COLLATE utf8_unicode_ci NOT NULL  UNIQUE KEY);
+
+
+
+//court bookings
+
+CREATE TABLE  `bookings` 
+(id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+`firstname` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+`date` DATE COLLATE utf8_unicode_ci NOT NULL, 
+`time` TIME COLLATE utf8_unicode_ci NOT NULL, 
+`arenaid` varchar(30) COLLATE utf8_unicode_ci UNIQUE KEY NOT NULL,
+`bookingid` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+`email` varchar(40) COLLATE utf8_unicode_ci UNIQUE KEY NOT NULL,
+`phone` integer(30) COLLATE utf8_unicode_ci UNIQUE KEY NOT NULL); 
+
+
+
