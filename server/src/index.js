@@ -1,8 +1,6 @@
 const Hapi = require('@hapi/hapi');
 const login = require('../actions/login')
 const register = require('../actions/register.js')
-const courtbookings = require('../actions/courtbookings')
-const retrievebookings = require('../actions/retrievebookings')
 const verify = '62fe5e897218bcf843eefea0'
 
 
@@ -23,24 +21,6 @@ const start = async () => {
                   return [];
             }
       });
-
-      //API routing for login
-      /*server.route({
-            method: 'POST',
-            path: '/api/login/email',
-            handler: async (request, h) => {
-                  const payload = request.payload
-                  if (payload.verify === verify) {
-
-                        return (login.login_email(payload.email, payload.password))
-                  }
-                  else {
-                        return 'Error 404. Page not found'
-                  }
-
-
-            }
-      });*/
 
 
       server.route({
@@ -97,26 +77,6 @@ const start = async () => {
             }
       });
 
-
-
-      //API routing for court bookings
-
-      server.route({
-            method: 'POST',
-            path: '/api/bookings',
-            handler: (request, h) => {
-                  const payload = request.paylaod
-                  if (payload.verify === verify) {
-
-                        return (courtbookings(payload.firstname, payload.date, payload.time, paylaod.arenaid, payload.bookingid, payload.phone))
-
-                  }
-                  else {
-                        return '404 Page not found';
-                  }
-
-            }
-      });
 
       server.start();
       console.log(`Server running on ${server.info.uri} `);

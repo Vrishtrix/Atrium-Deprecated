@@ -1,13 +1,13 @@
-const argon2 = require('argon2')
+const ck = require('ckey')
 const connection = require('../config/config');
 const messagebird = require('messagebird')(ck.API)
 const crypto = require("crypto");
 const key = ck.OTP_KEY;
-const ck = require('ckey')
+
 const otpGenerator = require("otp-generator");
 
 module.exports = async (firstname, lastname, phone) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
 
         const users = {
             "firstname": [firstname],
@@ -25,12 +25,11 @@ module.exports = async (firstname, lastname, phone) => {
                 })
             } else {
                 const otp = otpGenerator.generate(6, { alphabets: false, upperCase: false, specialChars: false });
-                const ttl = 5 * 60 * 1000; //5 Minutes in miliseconds
-                const expires = Date.now() + ttl; //timestamp to 5 minutes in the future
-                const data = `${phone}.${otp}.${expires}`; // phone.otp.expiry_timestamp
-                const hash = crypto.createHmac("sha256", key).update(data).digest("hex"); // creating SHA256 hash of the data
-                const fullHash = `${hash}.${expires}`; // Hash.expires, format to send to the user
-
+                const ttl = 5 * 60 * 1000; 
+                const expires = Date.now() + ttl;
+                const data = `${phone}.${otp}.${expires}`; 
+                const hash = crypto.createHmac("sha256", key).update(data).digest("hex"); 
+                const fullHash = `${hash}.${expires}`; 
 
 
 
@@ -43,18 +42,20 @@ module.exports = async (firstname, lastname, phone) => {
 
                 };
 
-                messagebird.messages.create(params, function (err, response) {
+                await messagebird.messages.create(params, async (err, response) => {
 
                     console.log(response)
-                    return resolve({
-                        'status': true,
-                        'hash': fullHash
-
-                    })
-
 
 
                 });
+                return resolve({
+                    'status': true,
+                    'hash': fullHash
+
+                })
+
+
+
             }
         });
     })
