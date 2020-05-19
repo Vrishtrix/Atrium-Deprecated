@@ -1,9 +1,8 @@
-const ck = require('ckey');
 var mysql = require('mysql2');
 var connection = mysql.createConnection({
-  host: ck.DB_HOST,
-  user: ck.DB_USER,
-  password: ck.DB_PASS,
+  host: '127.0.0.1',
+  user: 'root',
+  password: 'Dev!l0p@rR',
   database: 'atrium'
 });
 connection.connect(function (err) {
