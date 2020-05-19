@@ -1,11 +1,15 @@
 import React from 'react';
 
-import { LandingScreen, LoginScreen, VerifyScreen } from '../Screens';
+import { LoadingScreen, LandingScreen, LoginScreen, VerifyScreen } from '../Screens';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
 
 const screens = [
+      {
+            name: 'Loading',
+            component: LoadingScreen
+      },
       {
             name: 'Landing',
             component: LandingScreen
