@@ -2,12 +2,13 @@ const Hapi = require('@hapi/hapi');
 const login = require('../actions/login')
 const register = require('../actions/register.js')
 const verify = '62fe5e897218bcf843eefea0'
+const PORT = process.env.PORT || 3000
 
 
 const start = async () => {
       const server = Hapi.server
             ({
-                  port: 80,
+                  port: PORT,
                   host: '0.0.0.0',
 
             });
