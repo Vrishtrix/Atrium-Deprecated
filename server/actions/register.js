@@ -1,5 +1,4 @@
 const ck = require('ckey')
-const argon2 = require('argon2')
 const connection = require('../config/config');
 const messagebird = require('messagebird')(ck.API)
 const crypto = require("crypto");
