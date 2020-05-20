@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { LoadingScreen, LandingScreen, LoginScreen, VerifyScreen } from '../Screens';
+import { LoadingScreen, LandingScreen, LoginScreen, RegisterScreen, VerifyScreen } from '../Screens';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
@@ -17,6 +17,10 @@ const screens = [
       {
             name: 'Login',
             component: LoginScreen
+      },
+      {
+            name: 'Register',
+            component: RegisterScreen
       },
       {
             name: 'Verify',
