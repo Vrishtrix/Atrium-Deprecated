@@ -25,7 +25,7 @@ export const LoginScreen = ({ navigation }: { navigation: any }) => {
             .then( (res) => {
 
                   const hash = res.data.hash;
-                  res.data.status ? navigation.navigate('Verify', { hash }) : navigation.navigate('Register')
+                  res.data.status ? navigation.navigate('Verify', { hash: hash }) : navigation.navigate('Register')
             })
             .catch( (err) => {
                   console.error('We have encountered a problem while logging you in: \n', err);

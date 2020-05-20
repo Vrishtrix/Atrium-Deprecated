@@ -12,23 +12,25 @@ import {
 
 import axios from 'axios';
 
-export const VerifyScreen = ({ navigation }: { navigation: any }) => {
+export const VerifyScreen = ({ route, navigation }: { route: any, navigation: any }) => {
 
       const [ wrongOTP, changeWrongOTP ] = React.useState(false);
       const [ OTP, changeOTP ] = React.useState('');
 
       const doVerification = (OTP: string) => {
 
+            const { hash } = route.params;
             const verify = '62fe5e897218bcf843eefea0'
       
             axios.post('https://atrium-code.herokuapp.com/api/login/otp/verify', {
                   otp: OTP,
+                  hash: hash,
                   verify: verify
             })
             .then( (res) => {
-                  if(res.data.token != null && res.data.status == 'successful') {
+                  if(res.data.token != null && res.data.status == true) {
                         //await AsyncStorage.setItem( '@MySuperStore:atriumtoken', JSON.stringify(res.data.token));
-                        //navigate to dashboard
+                        navigation.navigate('Dashboard')
                   } else {
                         changeWrongOTP(true);
                   }
@@ -62,7 +64,7 @@ export const VerifyScreen = ({ navigation }: { navigation: any }) => {
                               placeholder='One-Time Password'
                               keyboardType='number-pad'
                               value={OTP}
-                              maxLength={10}
+                              maxLength={6}
                               onChangeText={ (val) => changeOTP(val) }
                               style={styles.input}
                         />

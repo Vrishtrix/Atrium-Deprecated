@@ -37,7 +37,7 @@ export const RegisterScreen = ({ navigation }: { navigation: any }) => {
             .then( (res) => {
 
                   const hash = res.data.hash;
-                  res.data.status ? navigation.navigate('Verify', { hash }) : navigation.navigate('Login')
+                  res.data.status ? navigation.navigate('Verify', { hash: hash }) : navigation.navigate('Login')
             })
             .catch( err => console.error(err) );
 
@@ -99,7 +99,7 @@ export const RegisterScreen = ({ navigation }: { navigation: any }) => {
 
                   </View>
             </View>
-      )
+      );
 }
 
 const styles = StyleSheet.create({
