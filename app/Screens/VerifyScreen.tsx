@@ -21,7 +21,7 @@ export const VerifyScreen = ({ navigation }: { navigation: any }) => {
 
             const verify = '62fe5e897218bcf843eefea0'
       
-            axios.post('http:localhost:80/api/login/otp/verify', {
+            axios.post('https://atrium-code.herokuapp.com/api/login/otp/verify', {
                   otp: OTP,
                   verify: verify
             })

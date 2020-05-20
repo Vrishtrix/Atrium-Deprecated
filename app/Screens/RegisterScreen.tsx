@@ -28,14 +28,16 @@ export const RegisterScreen = ({ navigation }: { navigation: any }) => {
             
             const verify = '62fe5e897218bcf843eefea0'
 
-            axios.post('http:localhost:80/api/register', {
+            axios.post('https://atrium-code.herokuapp.com/api/register', {
                   firstname: firstName,
                   lastname: lastName,
                   phone: phoneNo,
                   verify: verify
             })
             .then( (res) => {
-                  res.data.status ? navigation.navigate('Verify') : navigation.navigate('Login')
+
+                  const hash = res.data.hash;
+                  res.data.status ? navigation.navigate('Verify', { hash }) : navigation.navigate('Login')
             })
             .catch( err => console.error(err) );
 
@@ -49,13 +51,27 @@ export const RegisterScreen = ({ navigation }: { navigation: any }) => {
       return(
             <View style={styles.container}>
                   <View style={styles.topcontainer}>
-                        <Text>
+                        <Text style={styles.title}>
                               Welcome to Atrium! Please Register below!
                         </Text>
                   </View>
 
                   <View style={styles.middlecontainer}>
                         
+                        <TextInput 
+                              placeholder='First Name'
+                              value={firstName}
+                              onChangeText={ (val) => buttonHandler(val, lastName, phoneNo) }
+                              style={styles.input}
+                        />
+
+                        <TextInput 
+                              placeholder='Last Name'
+                              value={lastName}
+                              onChangeText={ (val) => buttonHandler(firstName, val, phoneNo) }
+                              style={styles.input}
+                        />
+
                         <TextInput 
                               placeholder='Phone Number'
                               keyboardType='number-pad'
@@ -113,6 +129,13 @@ const styles = StyleSheet.create({
             alignItems: 'center',
             justifyContent: 'flex-end',
             backgroundColor: 'transparent'
+      },
+
+      title: {
+            fontFamily: 'museo-sans-regular',
+            fontSize: 20,
+            padding: 10,
+            textAlign: 'center'
       },
 
       input: {
