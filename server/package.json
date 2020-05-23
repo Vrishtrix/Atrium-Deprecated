@@ -1,27 +1,25 @@
 {
   "name": "@atrium/server",
   "version": "1.0.0",
-  "description": "Webserver for Atrium",
+  "description": "Backend server ",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/index.js"
+    "start": "nodemon server.js"
   },
   "author": "Siddharth Iyer",
   "license": "ISC",
   "dependencies": {
     "@hapi/hapi": "^19.1.1",
-    "fs": "0.0.1-security",
-    "install": "^0.13.0",
+    "apollo-server": "^2.13.1",
+    "dotenv": "^8.2.0",
+    "graphql": "^15.0.0",
     "jsonwebtoken": "^8.5.1",
     "messagebird": "^3.5.0",
     "mysql2": "^2.1.0",
-    "npm": "^6.14.5",
-    "otp-generator": "^1.1.0"
-  },
-  "devDependencies": {
-    "@hapi/inert": "^6.0.1",
-    "ckey": "^1.0.2",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "otp-generator": "^1.1.0",
+    "otp-without-db": "^1.0.4",
+    "sequelize": "^5.21.10"
   }
 }
