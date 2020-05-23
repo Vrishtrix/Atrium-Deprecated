@@ -10,35 +10,27 @@ import {
       Modal
 } from 'react-native';
 
-import axios from 'axios';
+import { login } from '../core/mutations';
+import { useMutation } from '@apollo/react-hooks';
 
 export const VerifyScreen = ({ route, navigation }: { route: any, navigation: any }) => {
-
-      const [ wrongOTP, changeWrongOTP ] = React.useState(false);
-      const [ OTP, changeOTP ] = React.useState('');
-
-      const doVerification = (OTP: string) => {
-
-            const { hash } = route.params;
-            const verify = '62fe5e897218bcf843eefea0'
       
-            axios.post('https://atrium-code.herokuapp.com/api/login/otp/verify', {
-                  otp: OTP,
-                  hash: hash,
-                  verify: verify
-            })
-            .then( (res) => {
-                  if(res.data.token != null && res.data.status == true) {
-                        //await AsyncStorage.setItem( '@MySuperStore:atriumtoken', JSON.stringify(res.data.token));
-                        navigation.navigate('Dashboard')
-                  } else {
-                        changeWrongOTP(true);
-                  }
-            })
-            .catch( (err) => {
-                  console.error('We have encountered a problem while logging you in: \n', err);
-            });
+      const verify = '62fe5e897218bcf843eefea0'
+      const [ wrongOTP, changeWrongOTP ] = React.useState(false);
+      const [ otp, changeOTP ] = React.useState('');
+
+      const onPress = () => {
+            const { hash, phone } = route.params
+            doLogin({ variables: {verify, phone, otp, hash} });
       }
+
+      const [ doLogin, {loading} ] = useMutation(login, {
+            onCompleted: async(data) => {
+                  const token = data.login.token
+                  console.log(token)
+                  navigation.navigate('Dashboard');
+            }
+      });
 
       return (
             <View style={styles.container}>
@@ -63,14 +55,14 @@ export const VerifyScreen = ({ route, navigation }: { route: any, navigation: an
                         <TextInput 
                               placeholder='One-Time Password'
                               keyboardType='number-pad'
-                              value={OTP}
+                              value={otp}
                               maxLength={6}
                               onChangeText={ (val) => changeOTP(val) }
                               style={styles.input}
                         />
 
                         <TouchableOpacity 
-                              onPress={ () => doVerification(OTP) }
+                              onPress={ () => onPress() }
                               style={styles.button}
                         >
                               <Text style={styles.buttontext}> Login </Text>

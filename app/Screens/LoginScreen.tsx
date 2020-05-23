@@ -24,7 +24,7 @@ export const LoginScreen = ({ navigation }: { navigation: any }) => {
             onCompleted: async(data) => {
                   const hash = data.checkphone.token
                   if (data.checkphone.code = '100' && hash != null) {
-                        navigation.navigate('Verify', { hash })
+                        navigation.navigate('Verify', { hash, phone })
                   } else {
                         navigation.navigate('Register')
                   }
