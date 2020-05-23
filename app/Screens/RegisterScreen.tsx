@@ -8,45 +8,41 @@ import {
       Image
 } from 'react-native';
 
-import axios from 'axios';
+import { signup } from '../core/mutations';
+import { useMutation } from '@apollo/react-hooks';
 
-export const RegisterScreen = ({ navigation }: { navigation: any }) => {
-
-      const buttonHandler = (firstName: string, lastName: string, phoneNo: string) => {
-            changeFirstName(firstName);
-            changeLastName(lastName);
-            changePhoneNo(phoneNo);
-
+export const RegisterScreen = ({ navigation }: { navigation: any }) => {   
+      
+      const buttonHandler = (firstname: string, lastname: string, phone: string) => {
+            changeFirstName(firstname);
+            changeLastName(lastname);
+            changePhoneNo(phone);
+/*
             if (phoneNo.length < 10 && firstName.length < 1 && lastName.length < 1) {
                   changeButtonDisabled(true);
             } else {
                   changeButtonDisabled(false);
             }
+*/
       }
 
-      const doRegister = (firstName: string, lastName: string, phoneNo: string) => {
-            
-            const verify = '62fe5e897218bcf843eefea0'
-
-            axios.post('https://atrium-code.herokuapp.com/api/register', {
-                  firstname: firstName,
-                  lastname: lastName,
-                  phone: phoneNo,
-                  verify: verify
-            })
-            .then( (res) => {
-
-                  const hash = res.data.hash;
-                  res.data.status ? navigation.navigate('Verify', { hash: hash }) : navigation.navigate('Login')
-            })
-            .catch( err => console.error(err) );
-
+      const onPress = () => {
+            doRegister({ variables: {verify, firstname, lastname, phone} });
       }
 
-      const [ firstName, changeFirstName ] = React.useState('');
-      const [ lastName, changeLastName ] = React.useState('');
-      const [ phoneNo, changePhoneNo ] = React.useState('');
-      const [ buttonDisabled, changeButtonDisabled ] = React.useState(true)
+      const [ doRegister, {loading} ] = useMutation(signup, {
+            onCompleted: async(data) => {
+                  const hash = data.signup.token
+                  console.log(hash)
+                  navigation.navigate('Verify', { hash });
+            }
+      });
+
+      const verify = '62fe5e897218bcf843eefea0';
+      const [ firstname, changeFirstName ] = React.useState('');
+      const [ lastname, changeLastName ] = React.useState('');
+      const [ phone, changePhoneNo ] = React.useState('');
+      const [ buttonDisabled, changeButtonDisabled ] = React.useState(false)
 
       return(
             <View style={styles.container}>
@@ -60,30 +56,30 @@ export const RegisterScreen = ({ navigation }: { navigation: any }) => {
                         
                         <TextInput 
                               placeholder='First Name'
-                              value={firstName}
-                              onChangeText={ (val) => buttonHandler(val, lastName, phoneNo) }
+                              value={firstname}
+                              onChangeText={ (val) => buttonHandler(val, lastname, phone) }
                               style={styles.input}
                         />
 
                         <TextInput 
                               placeholder='Last Name'
-                              value={lastName}
-                              onChangeText={ (val) => buttonHandler(firstName, val, phoneNo) }
+                              value={lastname}
+                              onChangeText={ (val) => buttonHandler(firstname, val, phone) }
                               style={styles.input}
                         />
 
                         <TextInput 
                               placeholder='Phone Number'
                               keyboardType='number-pad'
-                              value={phoneNo}
+                              value={phone}
                               maxLength={10}
-                              onChangeText={ (val) => buttonHandler(firstName, lastName, val) }
+                              onChangeText={ (val) => buttonHandler(firstname, lastname, val) }
                               style={styles.input}
                         />
 
                         <TouchableOpacity
                               disabled={buttonDisabled}
-                              onPress={ () => doRegister(firstName, lastName, phoneNo) }
+                              onPress={ () => onPress() }
                               style={styles.button}
                         >
                               <Text style={styles.buttontext}> Send OTP </Text>
