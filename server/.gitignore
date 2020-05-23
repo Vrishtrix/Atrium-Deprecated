@@ -1,0 +1,18 @@
+#npm
+**/npm-debug.*
+**/node_modules/
+
+#ide
+.vscode/
+
+# macOS
+.DS_Store
+
+#Environment Variables
+.env
+
+#my-sql script 
+mysql-gen 
+
+#test scripts
+test.js
