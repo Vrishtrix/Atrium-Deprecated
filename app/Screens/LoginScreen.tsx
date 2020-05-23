@@ -8,29 +8,28 @@ import {
       Image
 } from 'react-native';
 
-import axios from 'axios';
+import { checkphone } from '../core/mutations';
+import { useMutation } from '@apollo/react-hooks';
 
 export const LoginScreen = ({ navigation }: { navigation: any }) => {
 
-      const [ phoneNo, changePhoneNo ] = React.useState('');
+      const verify = '62fe5e897218bcf843eefea0';
+      const [ phone, changePhone ] = React.useState('');
 
-      const doLogin = async(phoneNo: string) => {
-
-            const verify = '62fe5e897218bcf843eefea0'
-      
-            axios.post('https://atrium-code.herokuapp.com/api/login/otp/gen', {
-                  phone: phoneNo,
-                  verify: verify
-            })
-            .then( (res) => {
-
-                  const hash = res.data.hash;
-                  res.data.status ? navigation.navigate('Verify', { hash: hash }) : navigation.navigate('Register')
-            })
-            .catch( (err) => {
-                  console.error('We have encountered a problem while logging you in: \n', err);
-            });
+      const onPress = () => {
+            doLogin({ variables: {verify, phone} });
       }
+
+      const [ doLogin, {loading} ] = useMutation(checkphone, {
+            onCompleted: async(data) => {
+                  const hash = data.checkphone.token
+                  if (data.checkphone.code = '100' && hash != null) {
+                        navigation.navigate('Verify', { hash })
+                  } else {
+                        navigation.navigate('Register')
+                  }
+            }
+      });
 
       return (
             <View style={styles.container}>
@@ -47,14 +46,14 @@ export const LoginScreen = ({ navigation }: { navigation: any }) => {
                         <TextInput 
                               placeholder='Phone Number'
                               keyboardType='number-pad'
-                              value={phoneNo}
+                              value={phone}
                               maxLength={10}
-                              onChangeText={ (val) => changePhoneNo(val) }
+                              onChangeText={ (val) => changePhone(val) }
                               style={styles.input}
                         />
 
                         <TouchableOpacity 
-                              onPress={ () => doLogin(phoneNo) }
+                              onPress={ () => onPress() }
                               style={styles.button}
                         >
                               <Text style={styles.buttontext}> Send OTP </Text>
