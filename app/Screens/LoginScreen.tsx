@@ -35,6 +35,12 @@ export const LoginScreen = ({ navigation }: { navigation: any }) => {
             }
       });
 
+      if(!isLoadingComplete) {
+            return (
+                  <LoadingScreen />
+            );
+      }
+      
       return (
             <View style={styles.container}>
                   <View style={styles.topcontainer}>
