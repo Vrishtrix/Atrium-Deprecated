@@ -11,10 +11,13 @@ import {
 import { checkphone } from '../core/mutations';
 import { useMutation } from '@apollo/react-hooks';
 
+import { LoadingScreen } from './LoadingScreen';
+
 export const LoginScreen = ({ navigation }: { navigation: any }) => {
 
       const verify = '62fe5e897218bcf843eefea0';
       const [ phone, changePhone ] = React.useState('');
+      const [isLoadingComplete, setLoadingComplete] = React.useState(true);
 
       const onPress = () => {
             doLogin({ variables: {verify, phone} });
@@ -23,10 +26,11 @@ export const LoginScreen = ({ navigation }: { navigation: any }) => {
       const [ doLogin, {loading} ] = useMutation(checkphone, {
             onCompleted: async(data) => {
                   const hash = data.checkphone.token
+                  setLoadingComplete(true);
                   if (data.checkphone.code = '100' && hash != null) {
-                        navigation.navigate('Verify', { hash, phone })
+                        await navigation.navigate('Verify', { hash, phone })
                   } else {
-                        navigation.navigate('Register')
+                        await navigation.navigate('Register')
                   }
             }
       });
@@ -53,7 +57,7 @@ export const LoginScreen = ({ navigation }: { navigation: any }) => {
                         />
 
                         <TouchableOpacity 
-                              onPress={ () => onPress() }
+                              onPress={ () => { setLoadingComplete(false); onPress() } }
                               style={styles.button}
                         >
                               <Text style={styles.buttontext}> Send OTP </Text>

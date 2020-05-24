@@ -13,25 +13,34 @@ import {
 import { login } from '../core/mutations';
 import { useMutation } from '@apollo/react-hooks';
 
+import { LoadingScreen } from './LoadingScreen';
+
 export const VerifyScreen = ({ route, navigation }: { route: any, navigation: any }) => {
       
-      const verify = '62fe5e897218bcf843eefea0'
+      const verify = '62fe5e897218bcf843eefea0';
       const [ wrongOTP, changeWrongOTP ] = React.useState(false);
       const [ otp, changeOTP ] = React.useState('');
+      const [isLoadingComplete, setLoadingComplete] = React.useState(true);
 
-      const onPress = () => {
-            const { hash, phone } = route.params
-            doLogin({ variables: {verify, phone, otp, hash} });
+      const onPress = async() => {
+            const { hash, phone } = route.params;
+            await doLogin({ variables: {verify, phone, otp, hash} });
       }
 
       const [ doLogin, {loading} ] = useMutation(login, {
             onCompleted: async(data) => {
-                  const token = data.login.token
-                  console.log(token)
-                  navigation.navigate('Dashboard');
+                  const token = data.login.token;
+                  setLoadingComplete(true);
+                  await navigation.navigate('Dashboard');
             }
       });
 
+      if(!isLoadingComplete) {
+            return (
+                  <LoadingScreen />
+            );
+      }
+      
       return (
             <View style={styles.container}>
 
@@ -62,7 +71,7 @@ export const VerifyScreen = ({ route, navigation }: { route: any, navigation: an
                         />
 
                         <TouchableOpacity 
-                              onPress={ () => onPress() }
+                              onPress={ () => { setLoadingComplete(false); onPress() } }
                               style={styles.button}
                         >
                               <Text style={styles.buttontext}> Login </Text>

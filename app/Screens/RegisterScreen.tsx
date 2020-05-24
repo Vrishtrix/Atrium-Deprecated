@@ -11,6 +11,8 @@ import {
 import { signup } from '../core/mutations';
 import { useMutation } from '@apollo/react-hooks';
 
+import { LoadingScreen } from './LoadingScreen';
+
 export const RegisterScreen = ({ navigation }: { navigation: any }) => {   
       
       const buttonHandler = (firstname: string, lastname: string, phone: string) => {
@@ -34,7 +36,8 @@ export const RegisterScreen = ({ navigation }: { navigation: any }) => {
             onCompleted: async(data) => {
                   const hash = data.signup.token
                   console.log(hash)
-                  navigation.navigate('Verify', { hash });
+                  setLoadingComplete(true);
+                  await navigation.navigate('Verify', { hash });
             }
       });
 
@@ -43,6 +46,13 @@ export const RegisterScreen = ({ navigation }: { navigation: any }) => {
       const [ lastname, changeLastName ] = React.useState('');
       const [ phone, changePhoneNo ] = React.useState('');
       const [ buttonDisabled, changeButtonDisabled ] = React.useState(false)
+      const [isLoadingComplete, setLoadingComplete] = React.useState(true);
+
+      if(!isLoadingComplete) {
+            return (
+                  <LoadingScreen />
+            );
+      }
 
       return(
             <View style={styles.container}>
@@ -79,7 +89,7 @@ export const RegisterScreen = ({ navigation }: { navigation: any }) => {
 
                         <TouchableOpacity
                               disabled={buttonDisabled}
-                              onPress={ () => onPress() }
+                              onPress={ () => { setLoadingComplete(false); onPress() } }
                               style={styles.button}
                         >
                               <Text style={styles.buttontext}> Send OTP </Text>
