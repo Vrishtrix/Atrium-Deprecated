@@ -12,6 +12,7 @@
   "dependencies": {
     "@hapi/hapi": "^19.1.1",
     "apollo-server": "^2.13.1",
+    "apollo-server-azure-functions": "^2.13.1",
     "dotenv": "^8.2.0",
     "graphql": "^15.0.0",
     "jsonwebtoken": "^8.5.1",
