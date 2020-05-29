@@ -25,6 +25,7 @@ const resolvers = {
     Mutation: {
         // Handle user signup
         async signup(_, { verify, firstname, lastname, phone }) {
+            try{
             if (verify === verifykey) {
                 const user = await User.findOne({ where: { phone } })
                 if (!user) {
@@ -46,10 +47,15 @@ const resolvers = {
                 }
             }
             else { return ("Not Verified") }
+        }
+        catch(err){
+            return("Server error")
+        }
         },
 
         // Handles user in
         async login(_, { verify, phone, otp, hash }) {
+            try{
             if (verify === verifykey) {
 
                 if (otpTool.verifyOTP(phone, otp, hash, key)===true){
@@ -68,8 +74,13 @@ const resolvers = {
                 }
             }
             else { return ("Not Verified") }
+        }
+        catch(err){
+            return("Server")
+        }
         },
         async checkphone(_, { verify, phone }) {
+            try{
             if (verify === verifykey) {
                 const user = await User.findOne({ where: { phone } })
 
@@ -91,6 +102,10 @@ const resolvers = {
 
             }
             else { return ("Not Verified") }
+        }
+        catch(err){
+            return("Server Error")
+        }
         }
     }
 }
