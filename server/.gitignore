@@ -3,7 +3,6 @@
 **/node_modules/
 
 #ide
-.vscode/
 
 # macOS
 .DS_Store
